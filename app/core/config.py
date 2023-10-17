@@ -1,9 +1,9 @@
 import secrets
 from typing import List
+import os
 
 from pydantic_settings import BaseSettings
 from pydantic import AnyHttpUrl
-
 
 class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
@@ -16,10 +16,10 @@ class Settings(BaseSettings):
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
-    PROJECT_NAME: str = "KHUMON"
+    PROJECT_NAME: str = "KHUMON-LLM"
+    OPENAI_API_KEY: str
 
     class Config:
-        case_sensitive = True
-
+        env_file= ".env"
 
 settings = Settings()
