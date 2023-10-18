@@ -1,6 +1,10 @@
 from typing import List
 from pydantic import BaseModel
 
+
+class ReuqestText(BaseModel):
+    text: str
+
 class Problem(BaseModel):
     problem_no: int
     question: str

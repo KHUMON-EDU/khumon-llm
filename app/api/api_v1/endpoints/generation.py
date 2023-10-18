@@ -3,10 +3,21 @@ from typing import Any
 from fastapi import APIRouter, UploadFile
 from app.utils import PreProcessor, parsing_generation_output
 from app.generation import Generator
-from app.schemas.generation import Generation
+from app.schemas.generation import Generation, ReuqestText
 
 router = APIRouter()
 generator = Generator()
+
+@router.post("/text", response_model=Generation)
+def generation_by_text(req: ReuqestText) -> Any:
+    """
+    Generate a response that includes a summary and questions from a text.\n
+    A text (string) is required in the request body.
+    """
+    result = generator.run(req.text)
+    problems = parsing_generation_output(result["generation"])
+
+    return {"summary": result["summary"], "problems": problems}
 
 @router.post("/pdf", response_model=Generation)
 def generation_by_pdf(upload_file: UploadFile) -> Any:
