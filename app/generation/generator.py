@@ -1,7 +1,10 @@
-from langchain.chat_models import ChatOpenAI
 import os
-from app.generation.prompts import prompt_templates
+
+from langchain.chat_models import ChatOpenAI
+
 from app.core.config import settings
+from app.generation.prompts import prompt_templates
+
 
 class Generator:
     def __init__(self):

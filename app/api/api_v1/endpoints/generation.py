@@ -1,9 +1,10 @@
 from typing import Any
 
 from fastapi import APIRouter, UploadFile
-from app.utils import PreProcessor, parsing_generation_output
+
 from app.generation import Generator
 from app.schemas.generation import Generation, ReuqestText
+from app.utils import PreProcessor, parsing_generation_output
 
 router = APIRouter()
 generator = Generator()
