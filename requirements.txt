@@ -6,3 +6,5 @@ pypdf==3.16.2
 rapidocr-onnxruntime==1.3.7
 openai==0.28.1
 moviepy==1.0.3
+pydantic-settings==2.0.3
+python-multipart==0.0.6
