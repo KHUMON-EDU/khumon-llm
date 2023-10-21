@@ -8,9 +8,8 @@ from moviepy.editor import VideoFileClip, vfx
 
 from app.core.config import settings
 
-URL_REGEX = (
-    "(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?"
-)
+URL_REGEX = "(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})(\.[a-zA-Z0-9]{2,})?"
+
 
 class PreProcessor:
     def __init__(self, mode):
@@ -21,7 +20,7 @@ class PreProcessor:
     def run(self, source, is_ocr=False):
         if self.mode == "pdf":
             return self.get_pdf(source, is_ocr)
-        #TODO: It should also correspond to formats other than mp4
+        # TODO: It should also correspond to formats other than mp4
         elif self.mode == "video":
             return self.get_mp4(source)
 
@@ -45,10 +44,12 @@ class PreProcessor:
             video_clip = video_clip.fx(vfx.speedx, 1.5)
             video_clip.audio.write_audiofile(tmp_audio_path)
             with open(tmp_audio_path, "rb") as tmp_audio:
-                transcript = openai.Audio.transcribe("whisper-1", tmp_audio, api_key=settings.OPENAI_API_KEY)["text"]
+                transcript = openai.Audio.transcribe(
+                    "whisper-1", tmp_audio, api_key=settings.OPENAI_API_KEY
+                )["text"]
 
         return transcript
-    
+
     def concat_docs(self, pages):
         docs = ""
         for page in pages:
@@ -56,16 +57,13 @@ class PreProcessor:
             replace_content = re.sub(URL_REGEX, "", content)
             docs += replace_content
         return docs
-    
+
 
 def parsing_generation_output(source) -> list:
-    problems= []
-    items = [item for item in source.split('\n') if item]
-    for i in range(0, len(items)//2):
-        question = items[2*i].replace(f'Q{i+1}:', "").strip()
-        answer =  items[2*i+1].replace(f'A{i+1}:', "").strip()
-        problems.append({
-            "problem_no": i+1,
-            "question": question,
-            "answer": answer})
+    problems = []
+    items = [item for item in source.split("\n") if item]
+    for i in range(0, len(items) // 2):
+        question = items[2 * i].replace(f"Q{i+1}:", "").strip()
+        answer = items[2 * i + 1].replace(f"A{i+1}:", "").strip()
+        problems.append({"problem_no": i + 1, "question": question, "answer": answer})
     return problems

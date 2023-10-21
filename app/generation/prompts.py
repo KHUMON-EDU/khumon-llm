@@ -37,7 +37,7 @@ Translate the given sentences into Korean in a natural way, following the format
 )
 
 prompt_templates: dict = {
-    'summarization': summarization_prompt_template,
-    'generation': generation_prompt_template,
-    'translation': translation_prompt_template 
+    "summarization": summarization_prompt_template,
+    "generation": generation_prompt_template,
+    "translation": translation_prompt_template,
 }
