@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter, UploadFile, HTTPException
 
 from app.generation import Generator
 from app.schemas.generation import Generation, ReuqestText, generation_schema_example
@@ -9,6 +9,7 @@ from app.utils import PreProcessor, parsing_generation_output
 router = APIRouter()
 generator = Generator()
 
+support_video_types = ['video/mp4']
 
 @router.post("/text", response_model=Generation)
 def generation_by_text(req: ReuqestText, live_mode: bool = True) -> Any:
@@ -34,7 +35,9 @@ def generation_by_pdf(upload_file: UploadFile, live_mode: bool = True) -> Any:
     """
     if not live_mode:
         return generation_schema_example
-
+    
+    if not (upload_file.content_type =="application/pdf"):
+        raise HTTPException(status_code=415, detail="Content type must be application/pdf.")
     source = upload_file.file.read()
     pdf_preprocessor = PreProcessor(mode="pdf")
     docs = pdf_preprocessor.run(source)
@@ -53,6 +56,10 @@ async def generation_by_video(upload_file: UploadFile, live_mode: bool = True) -
     """
     if not live_mode:
         return generation_schema_example
+    
+    if upload_file.content_type not in support_video_types:
+        raise HTTPException(status_code=415, detail=f"Content type must be {support_video_types}.")
+
     source = upload_file.file.read()
     video_preprocessor = PreProcessor(mode="video")
     docs = video_preprocessor.run(source)
