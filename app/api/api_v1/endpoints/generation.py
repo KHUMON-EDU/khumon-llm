@@ -23,9 +23,10 @@ def generation_by_text(req: ReuqestText, live_mode: bool = True) -> Any:
     """
 
     result = generator.run(req.text)
+    summary =  result["summary"]
     problems = parsing_generation_output(result["generation"])
 
-    return {"summary": result["summary"], "problems": problems}
+    return {"summary": summary, "problems": problems}
 
 
 @router.post("/pdf", response_model=Generation)
@@ -40,9 +41,10 @@ def generation_by_pdf(upload_file: UploadFile, live_mode: bool = True) -> Any:
     pdf_preprocessor = PreProcessor(mode="pdf")
     docs = pdf_preprocessor.run(source)
     result = generator.run(docs)
+    summary =  result["summary"]
     problems = parsing_generation_output(result["generation"])
 
-    return {"summary": result["summary"], "problems": problems}
+    return {"summary": summary, "problems": problems}
 
 
 @router.post("/video", response_model=Generation)
@@ -58,6 +60,7 @@ async def generation_by_video(upload_file: UploadFile, live_mode: bool = True) -
     video_preprocessor = PreProcessor(mode="video")
     docs = video_preprocessor.run(source)
     result = generator.run(docs)
+    summary =  result["summary"]
     problems = parsing_generation_output(result["generation"])
 
-    return {"summary": result["summary"], "problems": problems}
+    return {"summary": summary, "problems": problems}
