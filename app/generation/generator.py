@@ -23,7 +23,12 @@ class Generator:
         generation_prompt = prompt_templates["generation"].format(summary=summary)
         generation = self.llm.predict(generation_prompt)
 
-        translation_prompt = prompt_templates["translation"].format(script=generation)
-        translate_generation = self.llm.predict(translation_prompt)
+        #TODO: Add translation mode (en, kr)
 
-        return {"summary": summary, "generation": translate_generation}
+        translation_generation_prompt = prompt_templates["translation"].format(script=generation)
+        translate_generation = self.llm.predict(translation_generation_prompt)
+
+        translation_translation_prompt = prompt_templates["translation"].format(script=summary)
+        translate_summary = self.llm.predict(translation_translation_prompt)
+
+        return {"summary": translate_summary, "generation": translate_generation}
