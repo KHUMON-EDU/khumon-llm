@@ -1,4 +1,5 @@
 from typing import Any
+from functools import wraps
 
 from fastapi import APIRouter, HTTPException, UploadFile
 
@@ -10,17 +11,25 @@ router = APIRouter()
 generator = Generator()
 
 support_video_types = ["video/mp4"]
+support_pdf_types = ["application/pdf"]
+
+def live_mode(func):
+    @wraps(func)
+    def wrapper_live_mode(*args, **kwargs):
+        if kwargs['live_mode']:
+            func(*args, **kwargs)
+        else:
+            return generation_schema_example
+    return wrapper_live_mode
 
 
 @router.post("/text", response_model=Generation)
+@live_mode
 def generation_by_text(req: ReuqestText, live_mode: bool = True) -> Any:
     """
     Generate a response that includes a summary and questions from a text.\n
     A text (string) is required in the request body.
     """
-    # TODO: Remove code duplication using decorators, etc
-    if not live_mode:
-        return generation_schema_example
 
     result = generator.run(req.text)
     problems = parsing_generation_output(result["generation"])
@@ -29,13 +38,12 @@ def generation_by_text(req: ReuqestText, live_mode: bool = True) -> Any:
 
 
 @router.post("/pdf", response_model=Generation)
+@live_mode
 def generation_by_pdf(upload_file: UploadFile, live_mode: bool = True) -> Any:
     """
     Generate a response that includes a summary and questions from a PDF file.\n
     A multipart PDF file is required in the request body.
     """
-    if not live_mode:
-        return generation_schema_example
 
     if not (upload_file.content_type == "application/pdf"):
         raise HTTPException(
@@ -51,14 +59,13 @@ def generation_by_pdf(upload_file: UploadFile, live_mode: bool = True) -> Any:
 
 
 @router.post("/video", response_model=Generation)
+@live_mode
 async def generation_by_video(upload_file: UploadFile, live_mode: bool = True) -> Any:
     """
     Generate a response that includes a summary and questions from a VIDEO file.\n
     A multipart VIDEO file is required in the request body.\n
     Currently, only MP4 video file format is supported.
     """
-    if not live_mode:
-        return generation_schema_example
 
     if upload_file.content_type not in support_video_types:
         raise HTTPException(
