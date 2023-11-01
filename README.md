@@ -16,7 +16,7 @@
   <p align="center">
   API Engine for KHUMON Education service using LLM.
     <br />
-    <a href="http://facerain-dev.iptime.org:5000/docs"><strong>Explore the API docs »</strong></a>
+    <a href="http://facerain-dev.iptime.org:5000/redoc"><strong>Explore the API docs »</strong></a>
     <br />
     <br />
     <br />
@@ -83,7 +83,7 @@ I recommend building your environment on top of a **virtual environment** (e.g.,
 ## :globe_with_meridians: Features
 - **Summarize and quiz** lecture notes or videos.
 - You can input text, PDF, or video.
-- For more information, please refer to the [API documentation](http://facerain-dev.iptime.org:5000/docs).
+- For more information, please refer to the [API documentation](http://facerain-dev.iptime.org:5000/redoc).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
