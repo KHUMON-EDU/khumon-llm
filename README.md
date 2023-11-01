@@ -48,17 +48,17 @@
 ### 🚀 Guideline
 
 I recommend building your environment on top of a **virtual environment** (e.g., venv, anaconda, etc.)
-* Setup
+* **Setup**
   
   ```sh
   make setup
   ```
-* Run application
+* **Run application**
   
   ```sh
   uvicorn app.main:app
   ```
-* Linting & Testing
+* **Linting & Testing**
   
   ```sh
   # Linting
@@ -67,10 +67,10 @@ I recommend building your environment on top of a **virtual environment** (e.g.,
   # Testing
   make test
   ```
-* Build application for publising
+* **Dockerizing**
 
   ```sh
-  yarn build
+  docker build -t nickname/imagename .
   ```
 
 
