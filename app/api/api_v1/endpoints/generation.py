@@ -3,7 +3,8 @@ from typing import Any
 from fastapi import APIRouter, UploadFile
 
 from app.generation import Generator
-from app.schemas.generation import Generation, ReuqestText
+from app.generation.answer import check_answer
+from app.schemas.generation import Generation, ReuqestText, Assessment, RequestAssessment
 from app.utils import PreProcessor, parsing_generation_output
 from app.utils.decorators import live_mode, validate_content
 
@@ -31,7 +32,6 @@ def generation_by_text(req: ReuqestText, live_mode: bool = True) -> Any:
 
 @router.post("/pdf", response_model=Generation)
 @validate_content(support_pdf_types)
-@live_mode
 def generation_by_pdf(upload_file: UploadFile, live_mode: bool = True) -> Any:
     """
     Generate a response that includes a summary and questions from a PDF file.\n
@@ -48,8 +48,6 @@ def generation_by_pdf(upload_file: UploadFile, live_mode: bool = True) -> Any:
 
 
 @router.post("/video", response_model=Generation)
-@validate_content(support_video_types)
-@live_mode
 async def generation_by_video(upload_file: UploadFile, live_mode: bool = True) -> Any:
     """
     Generate a response that includes a summary and questions from a VIDEO file.\n
@@ -64,3 +62,19 @@ async def generation_by_video(upload_file: UploadFile, live_mode: bool = True) -
     problems = parsing_generation_output(result["generation"])
 
     return {"summary": summary, "problems": problems}
+
+@router.post("/assessment", response_model=Assessment)
+def check_answer_by_problem(req: RequestAssessment):
+    question = req.question
+    user_answer = req.answer
+    assessment = check_answer(question, user_answer)
+    correct = True
+
+    if "[CHECK: TRUE]" in assessment:
+        correct = True
+        assessment = assessment.replace("[CHECK: TRUE]", "")
+    else:
+        correct = False
+        assessment = assessment.replace("[CHECK: FALSE]", "")
+
+    return {"assessment": assessment, "correct": correct}

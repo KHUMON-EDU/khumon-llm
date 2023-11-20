@@ -9,7 +9,7 @@ from app.generation.prompts import prompt_templates
 class Generator:
     def __init__(self):
         self.llm = ChatOpenAI(
-            model_name="gpt-3.5-turbo-16k",
+            model_name="gpt-4-1106-preview",
             temperature=0,
             openai_api_key=settings.OPENAI_API_KEY,
         )

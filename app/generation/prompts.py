@@ -41,3 +41,23 @@ prompt_templates: dict = {
     "generation": generation_prompt_template,
     "translation": translation_prompt_template,
 }
+
+
+check_answer_template = PromptTemplate(
+    input_variables=["question", "user_answer"],
+    template="""
+The question for the problem and the user’s answer will be inputted. Compare the question and the user’s answer, and let me know if it’s correct.
+Speak as a professor would to a student. Please answer in Korean.
+Please inform me whether it’s correct or incorrect according to a predetermined format. If it’s correct, output ‘TRUE’, if it’s incorrect, output ‘FALSE’. Please ensure to output as shown in the example below. 
+[CHECK: TRUE]
+
+[CHECK: FALSE]
+
+And provide a simple explanation and proofreading
+
+
+Question: {question}
+User Answer: {user_answer}
+Helpful answer:
+""",
+)

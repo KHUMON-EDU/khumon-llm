@@ -48,3 +48,21 @@ class Generation(BaseModel):
     summary: str
     problems: List[Problem]
     model_config = {"json_schema_extra": {"examples": [generation_schema_example]}}
+
+
+class RequestAssessment(BaseModel):
+    question: str
+    answer: str
+    model_config = {"json_schema_extra": {"examples": [{
+  "question": "Amazon Elastic Compute Cloud (EC2)은 무엇인가요?",
+  "answer": "Amazon EC2는 사용자가 가상 컴퓨터를 임대하고 그 위에서 자신의 애플리케이션을 실행할 수 있는 클라우드 컴퓨팅 서비스입니다."
+}]}}
+
+
+class Assessment(BaseModel):
+    assessment: str
+    correct: bool
+    model_config = {"json_schema_extra": {"examples": [{
+  "assessment": "\n\n설명: 사용자님의 답변은 정확합니다. Amazon Elastic Compute Cloud(EC2)는 사용자가 가상 컴퓨팅 환경을 임대하여 사용할 수 있는 서비스로, 사용자는 이 가상 서버를 이용하여 자신의 애플리케이션을 실행하고 관리할 수 있습니다. EC2는 클라우드 컴퓨팅의 핵심 서비스 중 하나로, 유연한 컴퓨팅 파워를 제공합니다.",
+  "correct": True
+}]}}
