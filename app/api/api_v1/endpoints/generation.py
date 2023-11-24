@@ -48,7 +48,7 @@ def generation_by_pdf(upload_file: UploadFile, live_mode: bool = True) -> Any:
 
 
 @router.post("/video", response_model=Generation)
-async def generation_by_video(upload_file: UploadFile, live_mode: bool = True) -> Any:
+def generation_by_video(upload_file: UploadFile, live_mode: bool = True) -> Any:
     """
     Generate a response that includes a summary and questions from a VIDEO file.\n
     A multipart VIDEO file is required in the request body.\n
